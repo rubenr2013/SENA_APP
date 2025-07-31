@@ -28,7 +28,3 @@ urlpatterns = [
     
 ]
 
-#personalizacion del panel administrativo
-admin.site.site_header = "Panel administrativo SENA"
-admin.site.site_title = "SENA APP"
-admin.site.index_title = "Gestion de Aprendices"
