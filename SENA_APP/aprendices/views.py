@@ -1,13 +1,61 @@
-from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Aprendiz
+from django.template import loader
+from .models import Aprendiz, Curso
+from django.shortcuts import get_object_or_404
+
+# Create your views here.
+
 
 def aprendices(request):
-    filtro = request.GET.get('buscar')
-    if filtro:
-        lista = Aprendiz.objects.filter(nombre__icontains=filtro) | Aprendiz.objects.filter(apellido__icontains=filtro)
-    else:
-        lista = Aprendiz.objects.all()
-    return render(request, 'lista_aprendices.html', {'aprendices': lista})
+    lista_aprendices = Aprendiz.objects.all().order_by('apellido', 'nombre')
+    template = loader.get_template('lista_aprendices.html')
+
+    context = {
+        'lista_aprendices': lista_aprendices,
+        'total_aprendices': lista_aprendices.count(),
+    }
+    return HttpResponse(template.render(context, request))
+
+
 def inicio(request):
-    return render(request, 'inicio.html')
+    # Estadísticas generales
+    total_aprendices = Aprendiz.objects.count()
+    total_cursos = Curso.objects.count()
+    cursos_activos = Curso.objects.filter(estado__in=['INI', 'EJE']).count()
+    template = loader.get_template('inicio.html')
+
+    context = {
+        'total_aprendices': total_aprendices,
+        'total_cursos': total_cursos,
+        'cursos_activos': cursos_activos,
+    }
+
+    return HttpResponse(template.render(context, request))
+
+
+def lista_cursos(request):
+    cursos = Curso.objects.all().order_by('-fecha_inicio')
+    template = loader.get_template('lista_cursos.html')
+
+    context = {
+        'lista_cursos': cursos,
+        'total_cursos': cursos.count(),
+        'titulo': 'Lista de Cursos'
+    }
+
+    return HttpResponse(template.render(context, request))
+
+
+def detalle_curso(request, curso_id):
+    curso = get_object_or_404(Curso, id=curso_id)
+    aprendices_curso = curso.aprendizcurso_set.all()
+    instructores_curso = curso.instructorcurso_set.all()
+    template = loader.get_template('detalle_curso.html')
+
+    context = {
+        'curso': curso,
+        'aprendices_curso': aprendices_curso,
+        'instructores_curso': instructores_curso,
+    }
+
+    return HttpResponse(template.render(context, request))
