@@ -16,14 +16,16 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import include, path
-from aprendices import views
+from django.urls import path, include
 
 urlpatterns = [
-    path("", views.inicio, name="inicio"),
     path("admin/", admin.site.urls),
-    path("aprendices/", include("aprendices.urls")),
-    path("instructores/", include("instructores.urls")),
-    path('', include('programas.urls')),
+    path('', include('aprendices.urls')),
+    path('instructores', include('instructores.urls')),
+    path('programas', include('programas.urls')),
 ]
 
+# Personalización del panel administrativo
+admin.site.site_header = "Panel Administrativo SENA"
+admin.site.site_title = "SENA APP"
+admin.site.index_title = "Gestión de Aprendices"
