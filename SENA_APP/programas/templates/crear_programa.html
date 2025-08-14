@@ -1,109 +1,164 @@
 {% extends 'base.html' %}
 {% block title %}Agregar Programa - SENA APP{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-10">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h3 class="card-title mb-0">
-                    <i class="fas fa-book"></i> Agregar Programa de Formación
-                </h3>
-            </div>
-            <div class="card-body">
-                <form method="post" novalidate>
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>{{ form.codigo.label }} <span class="text-danger">*</span></label>
-                            {{ form.codigo }}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-book me-2"></i> Agregar Programa de Formación
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Código y nombre -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    {{ form.codigo.label }} <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="{{ form.codigo.name }}" id="{{ form.codigo.id_for_label }}" value="{{ form.codigo.value|default:'' }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    {{ form.nombre.label }} <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="{{ form.nombre.name }}" id="{{ form.nombre.id_for_label }}" value="{{ form.nombre.value|default:'' }}" required>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label>{{ form.nombre.label }} <span class="text-danger">*</span></label>
-                            {{ form.nombre }}
+
+                        <!-- Nivel de formación y modalidad -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.nivel_formacion.label }}</label>
+                                <select class="form-select" name="{{ form.nivel_formacion.name }}" id="{{ form.nivel_formacion.id_for_label }}">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    {% for choice in form.nivel_formacion %}
+                                        <option value="{{ choice.0 }}" {% if choice.0|stringformat:"s" == form.nivel_formacion.value|stringformat:"s" %}selected{% endif %}>{{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.modalidad.label }}</label>
+                                <select class="form-select" name="{{ form.modalidad.name }}" id="{{ form.modalidad.id_for_label }}">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    {% for choice in form.modalidad %}
+                                        <option value="{{ choice.0 }}" {% if choice.0|stringformat:"s" == form.modalidad.value|stringformat:"s" %}selected{% endif %}>{{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label>{{ form.nivel_formacion.label }}</label>
-                            {{ form.nivel_formacion }}
+
+                        <!-- Duración en meses y horas -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.duracion_meses.label }}</label>
+                                <input type="number" class="form-control" name="{{ form.duracion_meses.name }}" id="{{ form.duracion_meses.id_for_label }}" value="{{ form.duracion_meses.value|default:'' }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.duracion_horas.label }}</label>
+                                <input type="number" class="form-control" name="{{ form.duracion_horas.name }}" id="{{ form.duracion_horas.id_for_label }}" value="{{ form.duracion_horas.value|default:'' }}">
+                            </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label>{{ form.modalidad.label }}</label>
-                            {{ form.modalidad }}
+
+                        <!-- Centro de formación y regional -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.centro_formacion.label }}</label>
+                                <input type="text" class="form-control" name="{{ form.centro_formacion.name }}" id="{{ form.centro_formacion.id_for_label }}" value="{{ form.centro_formacion.value|default:'' }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.regional.label }}</label>
+                                <input type="text" class="form-control" name="{{ form.regional.name }}" id="{{ form.regional.id_for_label }}" value="{{ form.regional.value|default:'' }}">
+                            </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label>{{ form.estado.label }}</label>
-                            {{ form.estado }}
+
+                        <!-- Estado -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.estado.label }}</label>
+                                <select class="form-select" name="{{ form.estado.name }}" id="{{ form.estado.id_for_label }}">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    {% for choice in form.estado %}
+                                        <option value="{{ choice.0 }}" {% if choice.0|stringformat:"s" == form.estado.value|stringformat:"s" %}selected{% endif %}>{{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>{{ form.duracion_meses.label }}</label>
-                            {{ form.duracion_meses }}
+
+                        <!-- Fecha de creación -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.fecha_creacion.label }}</label>
+                                <input type="date" class="form-control" name="{{ form.fecha_creacion.name }}" id="{{ form.fecha_creacion.id_for_label }}" value="{{ form.fecha_creacion.value|default:'' }}">
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label>{{ form.duracion_horas.label }}</label>
-                            {{ form.duracion_horas }}
+
+                        <!-- Descripción -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">{{ form.descripcion.label }}</label>
+                                <textarea class="form-control" name="{{ form.descripcion.name }}" id="{{ form.descripcion.id_for_label }}" rows="3">{{ form.descripcion.value|default:'' }}</textarea>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>{{ form.centro_formacion.label }}</label>
-                            {{ form.centro_formacion }}
+
+                        <!-- Competencias -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">{{ form.competencias.label }}</label>
+                                <textarea class="form-control" name="{{ form.competencias.name }}" id="{{ form.competencias.id_for_label }}" rows="3">{{ form.competencias.value|default:'' }}</textarea>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label>{{ form.regional.label }}</label>
-                            {{ form.regional }}
+
+                        <!-- Perfil de egreso -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">{{ form.perfil_egreso.label }}</label>
+                                <textarea class="form-control" name="{{ form.perfil_egreso.name }}" id="{{ form.perfil_egreso.id_for_label }}" rows="3">{{ form.perfil_egreso.value|default:'' }}</textarea>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>{{ form.fecha_creacion.label }}</label>
-                            {{ form.fecha_creacion }}
+
+                        <!-- Requisitos de ingreso -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">{{ form.requisitos_ingreso.label }}</label>
+                                <textarea class="form-control" name="{{ form.requisitos_ingreso.name }}" id="{{ form.requisitos_ingreso.id_for_label }}" rows="3">{{ form.requisitos_ingreso.value|default:'' }}</textarea>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label>{{ form.descripcion.label }}</label>
-                            {{ form.descripcion }}
+
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-end mt-4">
+                            <a href="{% url 'programas:lista_programas' %}" class="btn btn-outline-secondary me-2">
+                                <i class="fas fa-times me-1"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Guardar Programa
+                            </button>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label>{{ form.competencias.label }}</label>
-                            {{ form.competencias }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label>{{ form.perfil_egreso.label }}</label>
-                            {{ form.perfil_egreso }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label>{{ form.requisitos_ingreso.label }}</label>
-                            {{ form.requisitos_ingreso }}
-                        </div>
-                    </div>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{% url 'programas:lista_programas' %}" class="btn btn-secondary me-md-2">
-                            <i class="fas fa-times"></i> Cancelar
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Guardar Programa
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} mt-3">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
     </div>
 </div>
+
+<!-- Mensajes de éxito/error -->
+{% if messages %}
+<div class="container-fluid mt-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

@@ -1,84 +1,146 @@
 {% extends 'base.html' %}
-
 {% block title %}Agregar Aprendiz - SENA APP{% endblock %}
-
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h3 class="card-title mb-0">
-                    <i class="fas fa-user-plus"></i> Agregar Aprendiz
-                </h3>
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-user-graduate me-2"></i> Agregar Aprendiz
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Tipo de documento y documento de identidad -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.tipo_documento.label }}</label>
+                                <select class="form-select" name="{{ form.tipo_documento.name }}" id="{{ form.tipo_documento.id_for_label }}">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    {% for choice in form.tipo_documento %}
+                                        <option value="{{ choice.0 }}" {% if choice.0|stringformat:"s" == form.tipo_documento.value|stringformat:"s" %}selected{% endif %}>{{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    {{ form.documento_identidad.label }} <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="{{ form.documento_identidad.name }}" id="{{ form.documento_identidad.id_for_label }}" value="{{ form.documento_identidad.value|default:'' }}" required>
+                            </div>
+                        </div>
+
+                        <!-- Nombre y apellido -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    {{ form.nombre.label }} <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="{{ form.nombre.name }}" id="{{ form.nombre.id_for_label }}" value="{{ form.nombre.value|default:'' }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    {{ form.apellido.label }} <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" name="{{ form.apellido.name }}" id="{{ form.apellido.id_for_label }}" value="{{ form.apellido.value|default:'' }}" required>
+                            </div>
+                        </div>
+
+                        <!-- Teléfono y correo -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.telefono.label }}</label>
+                                <input type="text" class="form-control" name="{{ form.telefono.name }}" id="{{ form.telefono.id_for_label }}" value="{{ form.telefono.value|default:'' }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.correo.label }}</label>
+                                <input type="email" class="form-control" name="{{ form.correo.name }}" id="{{ form.correo.id_for_label }}" value="{{ form.correo.value|default:'' }}">
+                            </div>
+                        </div>
+
+                        <!-- Fecha de nacimiento y ciudad -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.fecha_nacimiento.label }}</label>
+                                <input type="date" class="form-control" name="{{ form.fecha_nacimiento.name }}" id="{{ form.fecha_nacimiento.id_for_label }}" value="{{ form.fecha_nacimiento.value|default:'' }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.ciudad.label }}</label>
+                                <input type="text" class="form-control" name="{{ form.ciudad.name }}" id="{{ form.ciudad.id_for_label }}" value="{{ form.ciudad.value|default:'' }}">
+                            </div>
+                        </div>
+
+                        <!-- Dirección -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">{{ form.direccion.label }}</label>
+                                <textarea class="form-control" name="{{ form.direccion.name }}" id="{{ form.direccion.id_for_label }}" rows="3">{{ form.direccion.value|default:'' }}</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Programa y estado -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.programa.label }}</label>
+                                <select class="form-select" name="{{ form.programa.name }}" id="{{ form.programa.id_for_label }}">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    {% for choice in form.programa %}
+                                        <option value="{{ choice.0 }}" {% if choice.0|stringformat:"s" == form.programa.value|stringformat:"s" %}selected{% endif %}>{{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.estado.label }}</label>
+                                <select class="form-select" name="{{ form.estado.name }}" id="{{ form.estado.id_for_label }}">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    {% for choice in form.estado %}
+                                        <option value="{{ choice.0 }}" {% if choice.0|stringformat:"s" == form.estado.value|stringformat:"s" %}selected{% endif %}>{{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Fecha de inicio -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">{{ form.fecha_inicio.label }}</label>
+                                <input type="date" class="form-control" name="{{ form.fecha_inicio.name }}" id="{{ form.fecha_inicio.id_for_label }}" value="{{ form.fecha_inicio.value|default:'' }}">
+                            </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-end mt-4">
+                            <a href="{% url 'aprendices:lista_aprendices' %}" class="btn btn-outline-secondary me-2">
+                                <i class="fas fa-times me-1"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Guardar Aprendiz
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="card-body">
-                <form method="post" novalidate>
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>{{ form.documento_identidad.label }} <span class="text-danger">*</span></label>
-                            {{ form.documento_identidad }}
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <label>{{ form.nombre.label }} <span class="text-danger">*</span></label>
-                            {{ form.nombre }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>{{ form.apellido.label }} <span class="text-danger">*</span></label>
-                            {{ form.apellido }}
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <label>{{ form.telefono.label }}</label>
-                            {{ form.telefono }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>{{ form.correo.label }}</label>
-                            {{ form.correo }}
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <label>{{ form.fecha_nacimiento.label }} <span class="text-danger">*</span></label>
-                            {{ form.fecha_nacimiento }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <label>{{ form.ciudad.label }}</label>
-                            {{ form.ciudad }}
-                        </div>
-                    </div>
-
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{% url 'aprendices:lista_aprendices' %}" class="btn btn-secondary me-md-2">
-                            <i class="fas fa-times"></i> Cancelar
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Guardar Aprendiz
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        
-        <div class="mt-3">
-            <small class="text-muted">
-                <i class="fas fa-info-circle"></i> 
-                Los campos marcados con <span class="text-danger">*</span> son obligatorios.
-            </small>
         </div>
     </div>
-</div> 
+</div>
 
-
-
+<!-- Mensajes de éxito/error -->
+{% if messages %}
+<div class="container-fluid mt-3">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
-
