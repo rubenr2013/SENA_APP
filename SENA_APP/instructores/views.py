@@ -1,13 +1,11 @@
 from django.http import HttpResponse
 from django.template import loader
 from django.urls import reverse_lazy
-from .models import Instructor
 from django.shortcuts import get_object_or_404
-
-from instructores.forms import InstructorForm
 from django.views.generic import FormView
 from django.contrib import messages
-
+from .models import Instructor
+from .forms import InstructorForm
 
 # Lista de instructores
 def instructores(request):
@@ -18,7 +16,6 @@ def instructores(request):
         'total_instructores': lista_instructores.count(),
     }
     return HttpResponse(template.render(context, request))
-
 
 # Detalle de un instructor
 def detalle_instructor(request, instructor_id):
@@ -33,12 +30,11 @@ def detalle_instructor(request, instructor_id):
     }
     return HttpResponse(template.render(context, request))
 
-
 # Formulario para crear instructor
 class InstructorFormView(FormView):
     template_name = 'crear_instructor.html'
     form_class = InstructorForm
-    success_url = "../"  # Usamos nombre de ruta, no ruta directa
+    success_url = reverse_lazy('instructores:lista_instructores')
 
     def form_valid(self, form):
         instructor = form.save()
